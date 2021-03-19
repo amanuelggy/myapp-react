@@ -1,23 +1,37 @@
 import logo from './logo.svg';
 import './App.css';
+import UserComponent from './components/UserComponent';
+import socialMediaAuth from './services/auth/auth';
+import { githubProvider } from './configs/authMethods';
+import firebase from "./configs/firebase-configs";
 
 function App() {
+  // let state = {isSignedIn: false};
+  // uiConfig = {
+  //   signInFlow: 'popup',
+  //   signInOptions: [
+  //     firebase.auth.GithubAuthProvider.PROVIDER_ID
+  //   ],
+  //   callbacks: {
+  //     signInSuccess: false
+  //   }
+  // }
+  const handleOnClick = async (provider) => {
+    const res = await socialMediaAuth(provider);
+    console.log(res);
+  }
+
+  let componentDidMount = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({ isSignedIn: !!user})
+      console.log('user', user);
+    });
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <UserComponent />
+
     </div>
   );
 }
